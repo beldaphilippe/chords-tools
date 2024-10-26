@@ -4,10 +4,10 @@
 
 ### Intervals
 
-Major second = 2 semitones
-Minor third = 3 semitones
-Major third = 4 semitones
-Perfect fourth = 5 semitones
+Major second = 2 semitones  
+Minor third = 3 semitones  
+Major third = 4 semitones  
+Perfect fourth = 5 semitones  
 
 ### 3 notes chords
 
