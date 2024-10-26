@@ -10,6 +10,24 @@
  *       M, m, -, +, sus2, sus4, 7, maj7, m7, m7b5
  */
 
+int getstr_nbo(char* line, int len_line) {
+    int i = 0;
+    char tmp = getchar();
+    while (tmp != '\n' && i<len_line-1) {
+        line[i] = tmp;
+        i++;
+        tmp = getchar();
+    }
+    line[i] = '\0';
+    if (i>=len_line-1) {
+        while ((getchar()) != '\n'); // clear the standard input flow in case of overflow
+        printf("error : input too long\n");
+        return 1;
+    }
+    else
+        return 0;
+}
+
 void paste(char *src, char *dst) {
   while (*src != '\0') {
     *dst = *src;
@@ -71,7 +89,7 @@ int which_note(char *note) {
       j++;
     }
   }
-  printf("error : unwnown note\n");
+  printf("error : unknown note\n");
   return -1;
 }
 
@@ -123,7 +141,7 @@ int which_chord(int *notes, int nb_notes) {
     if (is_chord)
       return chord_type + 12 * notes[is_chord - 1];
     else {
-      printf("error : not a chord\n");
+      printf("error : unknown chord\n");
       return -1;
     }
   } else if (nb_notes == 4) {
@@ -135,7 +153,7 @@ int which_chord(int *notes, int nb_notes) {
     printf("to implement\n");
     return -1;
   } else {
-    printf("error : not the correct number of notes\n");
+    printf("error : incorrect number of notes\n");
     return -1;
   }
 }
@@ -154,30 +172,39 @@ void display_chord(int chord) {
 
 int main() {
   printf("==== Chord detector ====\n");
-  printf(
-      "Give the notes of the chord, on a single line, separated by spaces\n");
-  char line[71];
-  // char *line = malloc(sizeof(char)*10);
-  scanf(" %[^\n]", line);
-  tolowercase(line);
-  char **notes = split(line, ' ');
-  int nb_notes = 0;
-  while (strcmp(notes[nb_notes], "\0"))
-    nb_notes++;
-  int *notes_tones = malloc(sizeof(int) * (nb_notes + 1));
-  for (int i = 0; i < nb_notes; i++) {
-    notes_tones[i] = which_note(notes[i]);
-  }
+  printf("Give the notes of the chord, on a single line, separated by spaces\n");
+  while (1) {
+      printf("------------------------\n");
+      const int LEN_LINE = 71;
+      char line[LEN_LINE];
+      // char *line = malloc(sizeof(char)*10);
+      /*scanf(" %[^\n]", line);*/
+      int is_overflow = getstr_nbo(line, LEN_LINE);
+      if (is_overflow) continue;
+      tolowercase(line);
+      char **notes = split(line, ' ');
+      int nb_notes = 0;
+      while (strcmp(notes[nb_notes], "\0"))
+        nb_notes++;
+      int *notes_tones = malloc(sizeof(int) * (nb_notes + 1));
+      for (int i = 0; i < nb_notes; i++) {
+          int tmp = which_note(notes[i]);
+          if (tmp == -1)
+              continue;
+          else
+              notes_tones[i] = tmp;
+      }
 
-  display_chord(which_chord(notes_tones, nb_notes));
+      display_chord(which_chord(notes_tones, nb_notes));
 
-  int i = 0;
-  while (strcmp(notes[i], "\0")) {
-    free(notes[i]);
-    i++;
+      int i = 0;
+      while (strcmp(notes[i], "\0")) {
+        free(notes[i]);
+        i++;
+      }
+      free(notes[i]);
+      free(notes);
+      free(notes_tones);
   }
-  free(notes[i]);
-  free(notes);
-  free(notes_tones);
   return 0;
 }
