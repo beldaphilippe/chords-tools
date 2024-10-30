@@ -38,12 +38,12 @@ Perfect fourth = 5 semitones
 We assume we know all the notes of the scale.  
 To know what scale we are in, we got two solutions :
 * __Sharps__ : The last sharp (#) is the sensible (7th) of the scale (major). 
-  Ex: F#, C# -> D maj
+  Ex: F#, C# &#8594; D maj
 * __Flats__ : The second to last flat (b) is the root of the scale (major).
-  Ex: Bb, Eb &rarr Bb maj
-      Bb &rarr Fb maj
+  Ex: Bb, Eb &#8594; Bb maj
+      Bb &#8594; Fb maj
 
 ### equivalence major/minor scale
-Major &rarr minor : lower the root of a tone and a half
-Minor &rarr major : raise the root of a tone and a half
+Major &#8594; minor : lower the root of a tone and a half
+Minor &#8594; major : raise the root of a tone and a half
 
