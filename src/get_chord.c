@@ -90,10 +90,13 @@ int which_note(char *note) {
   return -1;
 }
 
-/* comparison modulo 12 */
-int modcmp(int x, int y) { return ((x % 12) == (y % 12)); }
+/* returns i mod n, but always positive */
+int modpos(const int i, const int n) { return ((i%n)+n)%n; }
 
-/* reorganize triads into standard order */
+/* comparison modulo 12 */
+int modcmp(int x, int y) { return ((modpos(x, 12)) == (modpos(y, 12))); }
+
+/* reorganize triads to standard order */
 int inversions_triads(int *notes, int int1, int int2) {
   int a = notes[0];
   int b = notes[1];
@@ -136,8 +139,7 @@ int which_chord(int *notes, int nb_notes) {
       chord_type = 4;
     if (test_sus4)
       chord_type = 5;
-    int is_chord =
-        test_M + test_m + test_augm + test_dism + test_sus2 + test_sus4;
+    int is_chord = test_M + test_m + test_augm + test_dism + test_sus2 + test_sus4;
     if (is_chord)
       return chord_type + 12 * notes[is_chord - 1];
     else {
@@ -146,11 +148,11 @@ int which_chord(int *notes, int nb_notes) {
     }
   } else if (nb_notes == 4) {
     /*int a=notes[0], b=notes[1], c=notes[2], d=notes[3];*/
-    printf("to implement\n");
+    printf("coming later\n");
     return -1;
   } else if (nb_notes == 5) {
     /*int a=notes[0], b=notes[1], c=notes[2], d=notes[3], e=notes[4];*/
-    printf("to implement\n");
+    printf("coming later\n");
     return -1;
   } else {
     printf("error : incorrect number of notes\n");
@@ -168,6 +170,7 @@ void display_chord(int chord) {
 }
 
 int main() {
+  /* printf("%d\n", modpos(5-10, 12)); */
   printf("==== Chord detector ====\n");
   printf("Give the notes of the chord, on a single line, separated by spaces\n");
   while (1) {
@@ -188,7 +191,7 @@ int main() {
           int tmp = which_note(notes[i]);
           if (tmp == -1)
               continue;
-          else
+          else 
               notes_tones[i] = tmp;
       }
 
@@ -197,7 +200,7 @@ int main() {
       int i = 0;
       while (strcmp(notes[i], "\0")) {
         free(notes[i]);
-        i++;
+		i++;
       }
       free(notes[i]);
       free(notes);

@@ -31,6 +31,9 @@ char **split(char *line, char delimiter);
 /* return the interger corresponding to _note_ */
 int which_note(char *note);
 
+/* returns i mod n, but always positive */
+int modpos(const int i, const int n);
+
 /* comparison modulo 12 */
 int modcmp(int x, int y);
 
