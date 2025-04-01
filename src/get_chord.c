@@ -1,15 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <get_chord.h>
 
 /* To encode the chords, we use 2 digits in the
  * base 12: from the left, we have:
- *  1: the root (in ascending order of indicator)
+ *  1: the root (in ascending order as indicated)
  *       A, A#, B, C, C#, D, D#, E, F, F#, G, G#
- *  2: the type (in ascending order of indicator)
+ *  2: the type (in ascending order as indicated)
  *       M, m, -, +, sus2, sus4, 7, maj7, m7, m7b5
  */
 
+/* parse the input line to extract */
 int getstr_nbo(char* line, int len_line) {
     int i = 0;
     char tmp = getchar();
@@ -28,6 +27,7 @@ int getstr_nbo(char* line, int len_line) {
         return 0;
 }
 
+/* paste the _src_ string into _dst_*/
 void paste(char *src, char *dst) {
   while (*src != '\0') {
     *dst = *src;
@@ -37,6 +37,7 @@ void paste(char *src, char *dst) {
   *dst = '\0';
 }
 
+/* converts any capital of the string _word_ into the corresponding lowercase*/
 void tolowercase(char *word) {
   while (*word != '\0') {
     if (*word >= 'A' && *word <= 'Z') {
@@ -46,6 +47,7 @@ void tolowercase(char *word) {
   }
 }
 
+/* splits the string _line_ around _delimiter_ */
 char **split(char *line, char delimiter) {
   const int MAX_NOTES = 5;
   char **split_line = malloc(sizeof(char *) * (MAX_NOTES + 1));
@@ -73,12 +75,7 @@ char **split(char *line, char delimiter) {
   return split_line;
 }
 
-const char *NOTES[12][3] = {
-    {"a", "\0"},        {"a#", "bb", "\0"}, {"b", "\0"},
-    {"c", "\0"},        {"c#", "db", "\0"}, {"d", "\0"},
-    {"d#", "eb", "\0"}, {"e", "\0"},        {"f", "\0"},
-    {"f#", "gb", "\0"}, {"g", "\0"},        {"g#", "ab", "\0"}};
-
+/* return the interger corresponding to _note_ */
 int which_note(char *note) {
   for (int cmt = 0; cmt < 12; cmt++) {
     int j = 0;
@@ -93,8 +90,10 @@ int which_note(char *note) {
   return -1;
 }
 
+/* comparison modulo 12 */
 int modcmp(int x, int y) { return ((x % 12) == (y % 12)); }
 
+/* reorganize triads into standard order */
 int inversions_triads(int *notes, int int1, int int2) {
   int a = notes[0];
   int b = notes[1];
@@ -115,6 +114,7 @@ int inversions_triads(int *notes, int int1, int int2) {
     return 0;
 }
 
+/* returns the name of the chord formed by the notes in _notes_ string */
 int which_chord(int *notes, int nb_notes) {
   if (nb_notes == 3) {
     int chord_type;
@@ -158,10 +158,7 @@ int which_chord(int *notes, int nb_notes) {
   }
 }
 
-const char KEYS[12][3] = {"A",  "A#", "B", "C",  "C#", "D",
-                          "D#", "E",  "F", "F#", "G",  "G#"};
-const char CHORD_TYPE[6][5] = {"\0", "m", "-", "+", "sus2", "sus4"};
-
+/* prints in stdout the name of _chord_ */
 void display_chord(int chord) {
   if (chord != -1) {
     int chord_type = chord % 12;
